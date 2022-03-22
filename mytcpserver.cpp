@@ -70,12 +70,14 @@ void MyTcpServer::incomingConnection(qintptr socketDescriptor) //Вадим
 //}
 
 void MyTcpServer::slotServerRead(){
+    QString res= "";
     socket = (QTcpSocket*)sender(); //Добавлено Вадим
     while(socket->bytesAvailable()>0)
     {
         QByteArray array = socket->readAll();
-        socket->write(array);
+        res.append(array);
     }
+    socket->write(parsing(res));
 }
 
 //void MyTcpServer::slotClientDisconnected(){
