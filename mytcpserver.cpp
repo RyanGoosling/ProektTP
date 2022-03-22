@@ -1,7 +1,7 @@
 #include "mytcpserver.h"
 #include <QDebug>
 #include <QCoreApplication>
-
+#include "serverfunctions.h"
 MyTcpServer::~MyTcpServer()
 {
     mTcpServer->close();
