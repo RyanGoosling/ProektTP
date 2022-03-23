@@ -8,27 +8,28 @@
 #include <QByteArray>
 #include <QDebug>
 
-class MyTcpServer : public QTcpServer //QObject//Убрано В
+class MyTcpServer : public  QObject// QTcpServer//Убрано В
 {
     Q_OBJECT
 public:
-    /*explicit*/ MyTcpServer();//(QObject *parent = nullptr);//Убрано В
-    QTcpSocket * socket; //В
+    explicit MyTcpServer(QObject *parent = nullptr);//Убрано В
+     QTcpSocket * socket;//В
     ~MyTcpServer();
 public slots:
 
-    void incomingConnection(qintptr socketDescriptor); //В
+    void incomingConnection(); //Вqintptr socketDescriptor
     //void slotReadyRead(); //Убрано В
 
     //void slotNewConnection(); //Убрано В
-    //void slotClientDisconnected(qintptr socketDescriptor);//Убрано В
+    void slotClientDisconnected();//Убрано В (qintptr socketDescriptor)
 
     void slotServerRead();
 
 private:
     QTcpServer * mTcpServer;
+
     QVector <QTcpSocket*> Sockets; //В
-    QByteArray Data; //В
+    //QByteArray Data; //В
 
     //void SendToClient(QString str); //Убрано В
 };

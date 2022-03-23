@@ -2,17 +2,18 @@
 #include <QDebug>
 #include <QCoreApplication>
 #include "serverfunctions.h"
+
 MyTcpServer::~MyTcpServer()
 {
     mTcpServer->close();
 }
 
-MyTcpServer::MyTcpServer(){//(QObject *parent) : QObject(parent){ //Убрано Вадим
-//    mTcpServer = new QTcpServer(this);
-//    connect(mTcpServer, &QTcpServer::newConnection,
-//            this, &MyTcpServer::slotNewConnection);
+MyTcpServer::MyTcpServer(QObject *parent) : QObject(parent){ //Убрано Вадим
+    mTcpServer = new QTcpServer(this);
+    connect(mTcpServer, &QTcpServer::newConnection,
+            this, &MyTcpServer::incomingConnection);
 
-    if(!this->listen(QHostAddress::Any, 12345))
+    if(!mTcpServer->listen(QHostAddress::Any, 12345))
     {
         qDebug() << "server is not started";
     }
@@ -22,15 +23,16 @@ MyTcpServer::MyTcpServer(){//(QObject *parent) : QObject(parent){ //Убрано
     }
 }
 
-void MyTcpServer::incomingConnection(qintptr socketDescriptor) //Вадим
+void MyTcpServer::incomingConnection() //Вадимqintptr socketDescriptor
 {
-    socket = new QTcpSocket;
-    socket->setSocketDescriptor(socketDescriptor);
+    //socket = new QTcpSocket;
+    //socket->setSocketDescriptor(socketDescriptor);
+    socket = mTcpServer->nextPendingConnection();
     connect(socket, &QTcpSocket::readyRead, this, &MyTcpServer::slotServerRead);
-    connect(socket, &QTcpSocket::disconnected, socket, &QTcpSocket::deleteLater);
+    connect(socket, &QTcpSocket::disconnected, this, &MyTcpServer::slotClientDisconnected);
 
     Sockets.push_back(socket);
-    qDebug() << "Client connection" << socketDescriptor;
+    qDebug() << "Client connection"; //<< socketDescriptor;
 }
 
 //void MyTcpServer::slotReadyRead() //Вадим
@@ -76,10 +78,11 @@ void MyTcpServer::slotServerRead(){
     {
         QByteArray array = socket->readAll();
         res.append(array);
+        socket->write(parsing(res.toUtf8()));
     }
-    socket->write(parsing(res));
+
 }
 
-//void MyTcpServer::slotClientDisconnected(){
-//    socket->close();
-//}
+void MyTcpServer::slotClientDisconnected(){
+    socket->close();
+}
