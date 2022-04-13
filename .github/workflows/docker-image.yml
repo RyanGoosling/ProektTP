@@ -19,13 +19,9 @@ jobs:
           username: ${{ secrets.RYANGOOSLING }}
           password: ${{ secrets.DOCKERTOKEN }}
       
-      - name: Build and push
-        uses: docker/build-push-action@v2
-        with:
-          context: ./
-          file: ./Dockerfile
-          builder: ${{ steps.buildx.outputs.name }}
-          push: true
-          tags: ${{ secrets.RYANGOOSLING }}/simplewhale:latest
-          cache-from: type=registry,ref=${{ secrets.RYANGOOSLING }}/simplewhale:buildcache
-          cache-to: type=registry,ref=${{ secrets.RYANGOOSLING }}/simplewhale:buildcache,mode=max
+      - name: Build
+        run: docker build -f Dockerfile -t echoserver .
+        
+      - name: Push
+        run: Docker push echoserver
+        
