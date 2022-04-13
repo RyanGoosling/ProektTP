@@ -1,3 +1,8 @@
+/*!
+ * \file
+ * \brief Заголовочный файл с описанием класса MyTcpServer
+ */
+
 #ifndef MYTCPSERVER_H
 #define MYTCPSERVER_H
 #include <QObject>

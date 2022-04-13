@@ -1,3 +1,8 @@
+/*!
+ * \file
+ * \brief Файл, содержащий реализацию методов класса MyTcpServer
+ */
+
 #include "mytcpserver.h"
 #include <QDebug>
 #include <QCoreApplication>

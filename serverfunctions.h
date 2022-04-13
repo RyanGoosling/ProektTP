@@ -1,3 +1,8 @@
+/*!
+ * \file
+ * \brief Заголовочный файл, определяющий функции сервера для взаимодействия с клиентом
+ */
+
 #ifndef SERVERFUNCTIONS_H
 #define SERVERFUNCTIONS_H
 
