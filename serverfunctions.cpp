@@ -21,20 +21,33 @@ QByteArray parsing (QString data_from_client){
         if (data_from_client_list.length() == 3) return reg(data_from_client_list.at(0), data_from_client_list.at(1), data_from_client_list.at(2));
         else return "Wrong input data - Need 3 parametrs.\n";
         }
+    else if (nameOfFunc=="check")
+        {
+        return check();
+        }
     else return "Wrong syntax.\n";
 }
 
-    QByteArray auth(QString log, QString pass){
+    QByteArray auth(QString login, QString password){
         QByteArray result = "";
         DataBase::getInstance();
-        result.append(DataBase::TestLogAndPas(log, pass).toUtf8());
+        result.append(DataBase::Found(login, password).toUtf8());
         result.append("\n");
         return result;
     }
-    QByteArray reg(QString log, QString pass, QString email){
+
+    QByteArray reg(QString login, QString password, QString email){
         QByteArray result = "";
         DataBase::getInstance();
-        result.append(DataBase::AddLogAndPas(log, pass, email).toUtf8());
+        result.append(DataBase::Add(login, password, email).toUtf8());
+        result.append("\n");
+        return result;
+    }
+
+    QByteArray check(){
+        QByteArray result = "";
+        DataBase::getInstance();
+        result.append(DataBase::Check().toUtf8());
         result.append("\n");
         return result;
     }

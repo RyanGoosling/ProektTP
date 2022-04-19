@@ -14,4 +14,6 @@ QByteArray auth(QString log, QString pass);
 
 QByteArray reg(QString log, QString pass, QString email);
 
+QByteArray check();
+
 #endif // SERVERFUNCTIONS_H

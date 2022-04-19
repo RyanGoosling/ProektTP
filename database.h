@@ -41,10 +41,9 @@ class DataBase
         static QSqlDatabase db;
     protected:
         DataBase(){}
-        DataBase(const DataBase& ) = delete;
-        DataBase& operator = (DataBase &) = delete;
-        ~DataBase() {
-        }
+        DataBase(const DataBase& );
+        DataBase& operator = (DataBase &);
+        ~DataBase() {}
         friend class DataBaseDestroyer;
     public:
         static DataBase* getInstance(){
@@ -60,14 +59,20 @@ class DataBase
                 if (!p_instance->db.open())
                     qDebug() << p_instance->db.lastError().text();
 
+                QSqlQuery query(p_instance->db);
+                query.exec("CREATE TABLE IF NOT EXISTS User("
+                           "login VARCHAR(20) NOT NULL, "
+                           "password VARCHAR(20) NOT NULL,"
+                           "email VARCHAR(30) NOT NULL"
+                           ")");
 
                 destroyer.initialize(p_instance);
             }
             return p_instance;
         }
 
-        static QString AddLogAndPas(QString login, QString password, QString email) {
-            if (DataBase::TestLogAndPas(login, password) != "User not found") return "The user is already registered";
+        static QString Add(QString login, QString password, QString email) {
+            if (DataBase::Found(login, password) != "User not found") return "The user is already registered";
             else {
                 QSqlQuery query(p_instance->db);
                 query.prepare("INSERT INTO User(login, password, email)"
@@ -80,22 +85,43 @@ class DataBase
             }
         };
 
-        static QString TestLogAndPas(QString login, QString password) {
+        static QString Found(QString login, QString password) {
             QSqlQuery query(p_instance->db);
             query.prepare("SELECT * FROM User where login = :login");
             query.bindValue(":login", login);
             query.exec();
             QSqlRecord rec = query.record();
-            int PasswordIndex = rec.indexOf("password");
-            if (!query.next()) return "User not found";
-            else {
-                QString TruePassword = query.value(PasswordIndex).toString();
-                if (TruePassword == password) return "True";
-                else return "False";
+            //int PasswordIndex = rec.indexOf("password");
+            if (!query.next()) return "Invalid login";
+            else
+            {
+                //QString TruePassword = query.value(rec.indexOf("password")).toString();
+
+                /*if (login == query.value(rec.indexOf("login")).toString())
+                {*/
+                    if (password == query.value(rec.indexOf("password")).toString()) return "True";
+                    else return "Invalid password";
+                /*}
+                else return "Invalid login";*/
             }
         }
 
+        static QString Check(){
+            QSqlQuery query(p_instance->db);
+            query.exec("SELECT * FROM User");
+            QSqlRecord rec = query.record();
+            QString login, password, email;
 
+            while (query.next()) {
+               login = query.value(rec.indexOf("login")).toString();
+               password = query.value(rec.indexOf("password")).toString();
+               email = query.value(rec.indexOf("email")).toString();
+
+               qDebug() << login << ";\t" <<password<<";\t"<<email;
+            }
+
+            return "Succes";
+        }
 
         static void closeDB()
         {
