@@ -13,7 +13,7 @@ MyTcpServer::~MyTcpServer()
     mTcpServer->close();
 }
 
-MyTcpServer::MyTcpServer(QObject *parent) : QObject(parent){ //Убрано Вадим
+MyTcpServer::MyTcpServer(QObject *parent) : QObject(parent){
     mTcpServer = new QTcpServer(this);
     connect(mTcpServer, &QTcpServer::newConnection,
             this, &MyTcpServer::incomingConnection);
@@ -28,57 +28,19 @@ MyTcpServer::MyTcpServer(QObject *parent) : QObject(parent){ //Убрано Ва
     }
 }
 
-void MyTcpServer::incomingConnection() //Вадимqintptr socketDescriptor
+void MyTcpServer::incomingConnection()
 {
-    //socket = new QTcpSocket;
-    //socket->setSocketDescriptor(socketDescriptor);
     socket = mTcpServer->nextPendingConnection();
     connect(socket, &QTcpSocket::readyRead, this, &MyTcpServer::slotServerRead);
     connect(socket, &QTcpSocket::disconnected, this, &MyTcpServer::slotClientDisconnected);
 
     Sockets.push_back(socket);
-    qDebug() << "Client connection"; //<< socketDescriptor;
+    qDebug() << "Client connection";
 }
-
-//void MyTcpServer::slotReadyRead() //Вадим
-//{
-//    socket = (QTcpSocket*)sender();
-//    QDataStream in(socket);
-//    in.setVersion(QDataStream::Qt_5_9);
-//    if(in.status() == QDataStream::Ok)
-//    {
-//        qDebug() << "read...";
-//        QString str;
-//        in >> str;
-//        qDebug() << str;
-//    }
-//    else
-//    {
-//        qDebug() << "DataStream error";
-//    }
-//}
-
-//void MyTcpServer::SendToClient(QString str) //Вадим
-//{
-//    Data.clear();
-//    QDataStream out(&Data, QIODevice::WriteOnly);
-//    out.setVersion(QDataStream::Qt_5_9);
-//    out << str;
-//    socket->write(Data);
-//}
-
-//void MyTcpServer::slotNewConnection(){ //Убрано Вадим
-// //   if(server_status==1){
-//        socket = mTcpServer->nextPendingConnection();
-//        socket->write("Hello, World!!! I am echo server!\r\n");
-//        connect(socket, &QTcpSocket::readyRead,this,&MyTcpServer::slotServerRead);
-//        connect(socket,&QTcpSocket::disconnected,this,&MyTcpServer::slotClientDisconnected);
-//   // }
-//}
 
 void MyTcpServer::slotServerRead(){
     QString res= "";
-    socket = (QTcpSocket*)sender(); //Добавлено Вадим
+    socket = (QTcpSocket*)sender();
     while(socket->bytesAvailable()>0)
     {
         QByteArray array = socket->readAll();
@@ -90,4 +52,5 @@ void MyTcpServer::slotServerRead(){
 
 void MyTcpServer::slotClientDisconnected(){
     socket->close();
+    qDebug() << "Client disconnected";
 }

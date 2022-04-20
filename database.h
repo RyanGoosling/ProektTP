@@ -61,9 +61,9 @@ class DataBase
 
                 QSqlQuery query(p_instance->db);
                 query.exec("CREATE TABLE IF NOT EXISTS User("
-                           "login VARCHAR(20) NOT NULL, "
+                           "login VARCHAR(20) NOT NULL UNIQUE, "
                            "password VARCHAR(20) NOT NULL,"
-                           "email VARCHAR(30) NOT NULL"
+                           "email VARCHAR(30) NOT NULL UNIQUE"
                            ")");
 
                 destroyer.initialize(p_instance);
@@ -72,7 +72,7 @@ class DataBase
         }
 
         static QString Add(QString login, QString password, QString email) {
-            if (DataBase::Found(login, password) != "User not found") return "The user is already registered";
+            if (DataBase::Found(login, password) != "Invalid login") return "The user is already registered";
             else {
                 QSqlQuery query(p_instance->db);
                 query.prepare("INSERT INTO User(login, password, email)"
@@ -83,7 +83,7 @@ class DataBase
                 query.exec();
             return "True";
             }
-        };
+        }
 
         static QString Found(QString login, QString password) {
             QSqlQuery query(p_instance->db);
@@ -111,6 +111,7 @@ class DataBase
             query.exec("SELECT * FROM User");
             QSqlRecord rec = query.record();
             QString login, password, email;
+            bool flag = false;
 
             while (query.next()) {
                login = query.value(rec.indexOf("login")).toString();
@@ -118,9 +119,16 @@ class DataBase
                email = query.value(rec.indexOf("email")).toString();
 
                qDebug() << login << ";\t" <<password<<";\t"<<email;
+               if (!flag) flag = true;
+               //else continue;
             }
-
-            return "Succes";
+            //query.exec("DROP TABLE User");
+            if (flag)
+                return "Succes";
+            else {
+                qDebug() << "Fail";
+                return "Fail";
+            }
         }
 
         static void closeDB()
