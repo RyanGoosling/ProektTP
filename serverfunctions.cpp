@@ -23,7 +23,7 @@ QByteArray parsing (QString data_from_client){
         }
     else if (nameOfFunc=="check")
         {
-        return check();
+        return check(); //вводить "check " без кавычек
         }
     else return "Wrong syntax.\n";
 }
