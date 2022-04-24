@@ -6,7 +6,7 @@
 #include "serverfunctions.h"
 #include "database.h"
 #include <QStringList>
-
+#include <qdebug.h>
 QByteArray parsing (QString data_from_client){
     QStringList data_from_client_list=data_from_client.split(QLatin1Char(' '));
     QString nameOfFunc = data_from_client_list.front();
@@ -32,7 +32,10 @@ QByteArray parsing (QString data_from_client){
         QByteArray result = "";
         DataBase::getInstance();
         result.append(DataBase::Found(login, password).toUtf8());
-        result.append("\n");
+        if (result=="True")
+        result="1";
+        else result="0";
+        qDebug() << result;
         return result;
     }
 

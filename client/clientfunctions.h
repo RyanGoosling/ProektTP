@@ -2,6 +2,7 @@
 #define CLIENTFUNCTIONS_H
 #include <QString>
 #include <QDebug>
+#include "Client.h"
 void auth(QString log,QString pass);
 void reg(QString log,QString pass,QString mail);
 void update_stat(int n, QString upd);

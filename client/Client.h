@@ -10,7 +10,7 @@
 #include <QString>
 #include <QObject>
 #include <QTcpSocket>
-
+#include "clientfunctions.h"
 class Client;
 
 class ClientDestroyer
@@ -50,7 +50,11 @@ class Client: public QObject
 		Client& operator = (Client &);
 		friend class ClientDestroyer;
 
-	public:
+    public:
+        int test=0;
+        int get_test(){
+            return test;
+        }
 		static Client* getInstance(){
 			if (!p_instance)
 			{
@@ -71,7 +75,9 @@ class Client: public QObject
 		while(mTcpSocket->bytesAvailable()>0)
     	{
         	QByteArray array = mTcpSocket->readAll();
-        	qDebug() << array;
+            if (array=="1"){
+                test=1;
+            }
     	}
 	}
 };

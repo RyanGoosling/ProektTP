@@ -1,6 +1,5 @@
 #include "authform.h"
 #include "ui_authform.h"
-
 AuthForm::AuthForm(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::AuthForm)
@@ -23,7 +22,6 @@ void AuthForm::on_pushButton_Reg_clicked()
     ui->pushButton_Reg->setVisible(false);
 }
 
-
 void AuthForm::on_pushButton_Ok_clicked()
 {
     QString login = ui->lineEdit_Login->text();
@@ -36,8 +34,10 @@ void AuthForm::on_pushButton_Ok_clicked()
     }
     else {
     auth(login,pass);
-    emit logged_in();
-    hide();
+    if (Client::getInstance()->Client::get_test()==1){
+        emit logged_in();
+        hide();
+    }
     }
 }
 

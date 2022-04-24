@@ -1,16 +1,15 @@
 #include "clientfunctions.h"
-
 void auth(QString log,QString pass){
-    QString res="auth&"+log+"&"+pass;
-    qDebug()<< res;
+    QString res="auth "+log+" "+pass;
+    Client::getInstance()->Client::SentToServer(res);
 };
 void reg(QString log,QString pass,QString mail){
-    QString res="auth&"+log+"&"+pass+"&"+mail;
-    qDebug()<< res;
+    QString res="reg "+log+" "+pass+" "+mail;
+    Client::getInstance()->Client::SentToServer(res);
 };
 void update_stat(int n, QString upd){
-    QString res= "updatestat&"+QString::number(n)+"&"+upd;
-    qDebug()<< res;
+    QString res= "updatestat "+QString::number(n)+" "+upd;
+    qDebug() << res;
 };
 QString solve_task1(QString input){
     return "placeholder1";
