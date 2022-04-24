@@ -30,6 +30,8 @@ class Client: public QObject
 		static Client * p_instance;
 		static ClientDestroyer destroyer;
         static QTcpSocket * mTcpSocket;
+signals:
+    void logged_in();
 	protected:
          Client(QObject *parent = nullptr)
 		{
@@ -76,7 +78,7 @@ class Client: public QObject
     	{
         	QByteArray array = mTcpSocket->readAll();
             if (array=="1"){
-                test=1;
+                emit logged_in();
             }
     	}
 	}

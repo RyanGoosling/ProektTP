@@ -14,17 +14,10 @@ class AuthForm : public QWidget
 public:
     explicit AuthForm(QWidget *parent = nullptr);
     ~AuthForm();
-    Ui::AuthForm * auth_form(){
-        return ui;
-    }
-
 private slots:
     void on_pushButton_Reg_clicked();
 
     void on_pushButton_Ok_clicked();
-
-signals:
-    void logged_in();
 private:
     Ui::AuthForm *ui;
 };

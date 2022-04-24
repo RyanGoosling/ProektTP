@@ -34,10 +34,7 @@ void AuthForm::on_pushButton_Ok_clicked()
     }
     else {
     auth(login,pass);
-    if (Client::getInstance()->Client::get_test()==1){
-        emit logged_in();
-        hide();
-    }
+    connect(Client::getInstance(),&Client::logged_in,this,&AuthForm::hide);
     }
 }
 

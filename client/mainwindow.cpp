@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
+#include "Client.h"
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -9,7 +9,7 @@ MainWindow::MainWindow(QWidget *parent)
     auth_f = new AuthForm;
     task_f = new TaskForm;
     auth_f->show();
-    connect(auth_f,&AuthForm::logged_in,this,&MainWindow::show);
+    connect(Client::getInstance(),&Client::logged_in,this,&MainWindow::show);
 }
 
 MainWindow::~MainWindow()
