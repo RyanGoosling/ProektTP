@@ -32,9 +32,9 @@ QByteArray parsing (QString data_from_client){
         QByteArray result = "";
         DataBase::getInstance();
         result.append(DataBase::Found(login, password).toUtf8());
-        if (result=="True")
-        result="1";
-        else result="0";
+        if (QString(result)=="True")
+             result = "1";
+        else result = "0";
         qDebug() << result;
         return result;
     }

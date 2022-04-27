@@ -42,8 +42,7 @@ class DataBase
     protected:
         DataBase(){
             db = QSqlDatabase::addDatabase("QSQLITE");
-            db.setDatabaseName("/root/server/DBserver.db");
-
+            db.setDatabaseName("../ProektTP/DBserver.db");
             db.open();
 
             if (!db.open())
