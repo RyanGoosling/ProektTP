@@ -45,12 +45,13 @@ void MyTcpServer::slotServerRead(){
     {
         QByteArray array = socket->readAll();
         res.append(array);
-        socket->write(parsing(res.toUtf8()));
+        socket->write(parsing(res.toUtf8(),socket->socketDescriptor()));
     }
 
 }
 
 void MyTcpServer::slotClientDisconnected(){
+    int flag_for_db = socket->socketDescriptor();
     socket->close();
     qDebug() << "Client disconnected";
 }

@@ -8,9 +8,9 @@
 
 #include <QString>
 
-QByteArray parsing(QString data_from_client);
+QByteArray parsing(QString data_from_client, int descript);
 
-QByteArray auth(QString log, QString pass);
+QByteArray auth(QString log, QString pass, int descript);
 
 QByteArray reg(QString log, QString pass, QString email);
 

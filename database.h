@@ -120,6 +120,21 @@ class DataBase
             db.close(); // Закрыть БД
         }
 
+        static void logout(int Descriptor)
+        {
+            QSqlQuery query(db);//при отключении меняем с сокетДескриптор на 0 по дескриптору
+            query.prepare("INSERT INTO User(logcheck) Values (0) Where logcheck = :Descriptor");
+            query.bindValue(":Descriptor", Descriptor);
+            query.exec();
+        }
+
+        static QString query(QString msg){
+            QSqlQuery query(db);
+            query.exec(msg);
+            QString result = "user_log_email_task1_task2_task3_status";
+            return result;
+        }
+
 };
 
 
