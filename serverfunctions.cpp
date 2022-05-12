@@ -7,13 +7,13 @@
 #include "database.h"
 #include <QStringList>
 #include <qdebug.h>
-QByteArray parsing (QString data_from_client, int descript){
+QByteArray parsing (QString data_from_client, int descriptor){
     QStringList data_from_client_list=data_from_client.split(QLatin1Char(' '));
     QString nameOfFunc = data_from_client_list.front();
     data_from_client_list.pop_front();
     if (nameOfFunc=="auth")
         {
-        if (data_from_client_list.length() == 2) return auth(data_from_client_list.at(0), data_from_client_list.at(1),descript);
+        if (data_from_client_list.length() == 2) return auth(data_from_client_list.at(0), data_from_client_list.at(1), descriptor);
         else return "Wrong input data - Need 2 parametrs.\n";
         }
     else if (nameOfFunc=="reg")
@@ -28,18 +28,18 @@ QByteArray parsing (QString data_from_client, int descript){
     else return "Wrong syntax.\n";
 }
 
-    QByteArray auth(QString login, QString password, int descript){
-        QByteArray result = "";
+    QByteArray auth(QString login, QString password, int descriptor){
+        //QByteArray result = "";
         DataBase::getInstance();
         QString res = DataBase::query("Select * from User where login = "+login+"and password = "+ password);
         if (res == "")
             return "0";
         else
         {
-            DataBase::query("изменить значение в столбце status в строке с логином  login на  descrit");
+            DataBase::login(descriptor, login);
             return "1";
         }
-        result.append(DataBase::Found(login, password).toUtf8());
+        /*result.append(DataBase::Found(login, password).toUtf8());
         if (QString(result)=="True")
         {
             result = "1";
@@ -47,7 +47,7 @@ QByteArray parsing (QString data_from_client, int descript){
         }
         else result = "0";
         qDebug() << result;
-        return result;
+        return result;*/
     }
 
     QByteArray reg(QString login, QString password, QString email){

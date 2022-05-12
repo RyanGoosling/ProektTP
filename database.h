@@ -93,17 +93,28 @@ class DataBase
 
         static QString Check(){ //дебаг таблицы - вывод данных таблицы в дебаг консоль
             QSqlQuery query(db);
+            //query.exec("DROP TABLE User");
+            //query.exec("Create table User (login varchar(30) not null, password varchar(30) not null, email varchar(30) not null, task1_all integer default 0, task1_right integer default 0, task2_all integer default 0, task2_right integer default 0, task3_all integer default 0, task3_right integer default 0, descriptor integer default 0)");
             query.exec("SELECT * FROM User");
             QSqlRecord rec = query.record();
             QString login, password, email;
+            int task1_all, task1_right, task2_all, task2_right, task3_all, task3_right, descriptor;
             bool flag = false;
 
             while (query.next()) {
                login = query.value(rec.indexOf("login")).toString();
                password = query.value(rec.indexOf("password")).toString();
                email = query.value(rec.indexOf("email")).toString();
+               task1_all = query.value(rec.indexOf("task1_all")).toInt();
+               task2_all = query.value(rec.indexOf("task2_all")).toInt();
+               task3_all = query.value(rec.indexOf("task3_all")).toInt();
+               task1_right = query.value(rec.indexOf("task1_right")).toInt();
+               task2_right = query.value(rec.indexOf("task2_right")).toInt();
+               task3_right = query.value(rec.indexOf("task3_right")).toInt();
+               descriptor = query.value(rec.indexOf("descriptor")).toInt();
 
-               qDebug() << login << ";\t" << password << ";\t" << email;
+               qDebug() << login << ";\t" << password << ";\t" << email << ";\t" << task1_all << ";\t" << task1_right
+                           << ";\t" << task2_all << ";\t" << task2_right << ";\t" << task3_all << ";\t" << task3_right << ";\t" <<descriptor;
                if (!flag) flag = true;
             }
             //query.exec("DROP TABLE User");
@@ -113,6 +124,7 @@ class DataBase
                 qDebug() << "Fail";
                 return "Fail";
             }
+            //return "suc";
         }
 
         static void closeDB()
@@ -123,8 +135,17 @@ class DataBase
         static void logout(int Descriptor)
         {
             QSqlQuery query(db);//при отключении меняем с сокетДескриптор на 0 по дескриптору
-            query.prepare("INSERT INTO User(logcheck) Values (0) Where logcheck = :Descriptor");
+            query.prepare("UPDATE User SET descriptor = 0 WHERE descriptor = :Descriptor");
             query.bindValue(":Descriptor", Descriptor);
+            query.exec();
+        }
+
+        static void login(int Descriptor, QString login)
+        {
+            QSqlQuery query(db);
+            query.prepare("UPDATE User SET descriptor = :Descriptor WHERE login = :login");
+            query.bindValue(":Descriptor", Descriptor);
+            query.bindValue(":login", login);
             query.exec();
         }
 

@@ -4,9 +4,7 @@
  */
 
 #include "mytcpserver.h"
-#include <QDebug>
-#include <QCoreApplication>
-#include "serverfunctions.h"
+
 
 MyTcpServer::~MyTcpServer()
 {
@@ -30,28 +28,33 @@ MyTcpServer::MyTcpServer(QObject *parent) : QObject(parent){
 
 void MyTcpServer::incomingConnection()
 {
-    socket = mTcpServer->nextPendingConnection();
+    QTcpSocket* socket = mTcpServer->nextPendingConnection();
     connect(socket, &QTcpSocket::readyRead, this, &MyTcpServer::slotServerRead);
     connect(socket, &QTcpSocket::disconnected, this, &MyTcpServer::slotClientDisconnected);
+    //connect(socket, SIGNAL(QTcpSocket::stateChanged(QTcpSocket::ClosingState)), this, SLOT(MyTcpServer::slotClientDisconnected));
 
     Sockets.push_back(socket);
-    qDebug() << "Client connection";
+    qDebug() << "Client connection"<<socket->socketDescriptor();
 }
 
 void MyTcpServer::slotServerRead(){
     QString res= "";
-    socket = (QTcpSocket*)sender();
+    QTcpSocket* socket = (QTcpSocket*)sender();
     while(socket->bytesAvailable()>0)
     {
         QByteArray array = socket->readAll();
         res.append(array);
-        socket->write(parsing(res.toUtf8(),socket->socketDescriptor()));
+        socket->write(parsing(res.toUtf8(), socket->socketDescriptor()));
     }
 
 }
 
 void MyTcpServer::slotClientDisconnected(){
-    int flag_for_db = socket->socketDescriptor();
+    QTcpSocket* socket = (QTcpSocket*)sender();
+    //Sockets.remove(Sockets.indexOf(socket));
+    DataBase::logout(socket->socketDescriptor());
+    qDebug() << "Client disconnected"<<socket->socketDescriptor();
     socket->close();
-    qDebug() << "Client disconnected";
+    //socket->deleteLater();
+    qDebug()<<socket->state();
 }

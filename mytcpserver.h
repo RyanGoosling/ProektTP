@@ -13,12 +13,16 @@
 #include <QByteArray>
 #include <QDebug>
 
+#include <QCoreApplication>
+#include "serverfunctions.h"
+#include "database.h"
+
 class MyTcpServer : public  QObject
 {
     Q_OBJECT
 public:
     explicit MyTcpServer(QObject *parent = nullptr);
-     QTcpSocket * socket;
+     //QTcpSocket * socket;
     ~MyTcpServer();
 public slots:
 
