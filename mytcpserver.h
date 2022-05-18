@@ -35,7 +35,7 @@ public slots:
 private:
     QTcpServer * mTcpServer;
 
-    QVector <QTcpSocket*> Sockets;
+    QVector <QPair<QTcpSocket*,int>> Sockets;
 };
 #endif // MYTCPSERVER_H
 

@@ -32,8 +32,8 @@ void MyTcpServer::incomingConnection()
     connect(socket, &QTcpSocket::readyRead, this, &MyTcpServer::slotServerRead);
     connect(socket, &QTcpSocket::disconnected, this, &MyTcpServer::slotClientDisconnected);
     //connect(socket, SIGNAL(QTcpSocket::stateChanged(QTcpSocket::ClosingState)), this, SLOT(MyTcpServer::slotClientDisconnected));
-
-    Sockets.push_back(socket);
+    int socket_desc=socket->socketDescriptor();
+    Sockets.push_back({socket,socket_desc});
     qDebug() << "Client connection"<<socket->socketDescriptor();
 }
 
@@ -50,11 +50,11 @@ void MyTcpServer::slotServerRead(){
 }
 
 void MyTcpServer::slotClientDisconnected(){
-    QTcpSocket* socket = (QTcpSocket*)sender();
-    //Sockets.remove(Sockets.indexOf(socket));
-    DataBase::logout(socket->socketDescriptor());
-    qDebug() << "Client disconnected"<<socket->socketDescriptor();
-    socket->close();
-    //socket->deleteLater();
-    qDebug()<<socket->state();
+    for (auto sock=0;sock<Sockets.size();sock++){
+        if (Sockets.at(sock).first->state() == 0){
+            Sockets.at(sock).first->close();
+            DataBase::logout(Sockets.at(sock).second);
+            Sockets.removeAt(sock);
+        }
+    }
 }
