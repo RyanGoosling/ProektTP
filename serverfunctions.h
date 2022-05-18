@@ -6,11 +6,15 @@
 #ifndef SERVERFUNCTIONS_H
 #define SERVERFUNCTIONS_H
 
+#include "database.h"
 #include <QString>
+#include <QTcpSocket>
+#include <QStringList>
+#include <qdebug.h>
 
-QByteArray parsing(QString data_from_client, int descript);
+QByteArray parsing(QString data_from_client, QString socket);
 
-QByteArray auth(QString log, QString pass, int descript);
+QByteArray auth(QString log, QString pass, QString socket);
 
 QByteArray reg(QString log, QString pass, QString email);
 

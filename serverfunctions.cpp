@@ -4,16 +4,14 @@
  */
 
 #include "serverfunctions.h"
-#include "database.h"
-#include <QStringList>
-#include <qdebug.h>
-QByteArray parsing (QString data_from_client, int descriptor){
+
+QByteArray parsing (QString data_from_client, QString socket){
     QStringList data_from_client_list=data_from_client.split(QLatin1Char(' '));
     QString nameOfFunc = data_from_client_list.front();
     data_from_client_list.pop_front();
     if (nameOfFunc=="auth")
         {
-        if (data_from_client_list.length() == 2) return auth(data_from_client_list.at(0), data_from_client_list.at(1), descriptor);
+        if (data_from_client_list.length() == 2) return auth(data_from_client_list.at(0), data_from_client_list.at(1), socket);
         else return "Wrong input data - Need 2 parametrs.\n";
         }
     else if (nameOfFunc=="reg")
@@ -28,22 +26,23 @@ QByteArray parsing (QString data_from_client, int descriptor){
     else return "Wrong syntax.\n";
 }
 
-    QByteArray auth(QString login, QString password, int descriptor){
-        //QByteArray result = "";
+    QByteArray auth(QString login, QString password, QString socket){
+
         DataBase::getInstance();
-        QString res = DataBase::query("Select * from User where login = "+login+"and password = "+ password);
+        QString res = DataBase::query("Select * from User where login = '"+login+"' and password = '"+password+"'");
         if (res == "")
             return "0";
         else
         {
-            DataBase::login(descriptor, login);
+            DataBase::login(socket, login);
             return "1";
         }
-        /*result.append(DataBase::Found(login, password).toUtf8());
+        /*QByteArray result = "";
+        result.append(DataBase::Found(login, password).toUtf8());
         if (QString(result)=="True")
         {
             result = "1";
-            int flag_for_db = socket->socketDescriptor();
+            DataBase::login(socket, login);
         }
         else result = "0";
         qDebug() << result;
