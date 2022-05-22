@@ -32,7 +32,6 @@ void MyTcpServer::incomingConnection()
     connect(socket, &QTcpSocket::readyRead, this, &MyTcpServer::slotServerRead);
     connect(socket, &QTcpSocket::disconnected, this, &MyTcpServer::slotClientDisconnected);
     //connect(socket, SIGNAL(QTcpSocket::stateChanged(QTcpSocket::ClosingState)), this, SLOT(MyTcpServer::slotClientDisconnected));
-
     Sockets.push_back(socket);
     std::stringstream flow;
     std::string address = "";
