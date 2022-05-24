@@ -154,11 +154,11 @@ class DataBase
             query.exec();
         }
 
-        static QString query(QString msg){
+        static void query(QString msg){
             QSqlQuery query(db);
             query.exec(msg);
-            QString result = "user_log_email_task1_task2_task3_status";
-            return result;
+            //QString result = "user_log_email_task1_task2_task3_status";
+            //return result;
         }
 
 };

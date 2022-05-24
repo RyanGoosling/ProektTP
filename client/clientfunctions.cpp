@@ -9,6 +9,7 @@ void reg(QString log,QString pass,QString mail){
 };
 void update_stat(int n, QString upd){
     QString res= "updatestat "+QString::number(n)+" "+upd;
+    Client::getInstance()->Client::SentToServer(res);
     qDebug() << res;
 };
 QString solve_task1(QString input){ //FDNF input - task, return - answer
@@ -52,7 +53,7 @@ QString solve_task2(QString input){//KNF input - task, return - answer
                 n++;
             }
             bracket += ")";
-            //bracket.replace(bracket.length()-4, 5, ")"); //before: (x1' & x2' & x3' & ), after: (x1' V x2' V x3')
+            //bracket.replace(bracket.length()-4, 5, ")"); //before: (x1' V x2' V x3' V ), after: (x1' V x2' V x3')
             answer += bracket + " & ";
         }
     answer.remove(answer.length()-3, 3);//remove excess " & ";

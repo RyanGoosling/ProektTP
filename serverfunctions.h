@@ -20,4 +20,6 @@ QByteArray reg(QString log, QString pass, QString email);
 
 QByteArray check();
 
+void updatestat(QString task, QString move, QString socket);
+
 #endif // SERVERFUNCTIONS_H

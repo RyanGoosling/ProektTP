@@ -23,20 +23,17 @@ QByteArray parsing (QString data_from_client, QString socket){
         {
         return check(); //вводить "check " без кавычек
         }
+    else if (nameOfFunc == "updatestat")
+        {
+        updatestat(data_from_client_list.at(0), data_from_client_list.at(1), socket);
+        return "State update.\n";
+        }
     else return "Wrong syntax.\n";
 }
 
     QByteArray auth(QString login, QString password, QString socket){
 
         DataBase::getInstance();
-        /*QString res = DataBase::query("Select * from User where login = '"+login+"' and password = '"+password+"'");
-        if (res == "")
-            return "0";
-        else
-        {
-            DataBase::login(socket, login);
-            return "1";
-        }*/
         QByteArray result = "";
         result.append(DataBase::Found(login, password).toUtf8());
         if (QString(result)=="True")
@@ -63,4 +60,10 @@ QByteArray parsing (QString data_from_client, QString socket){
         result.append(DataBase::Check().toUtf8());
         result.append("\n");
         return result;
+    }
+
+    void updatestat(QString task, QString move, QString socket){
+        if (move == "+")
+            DataBase::query("UPDATE User SET task"+task+"_right = task"+task+"_right+1 WHERE socket = '"+socket+"'");
+        DataBase::query("UPDATE User SET task"+task+"_all = task"+task+"_all+1 WHERE socket = '"+socket+"'");
     }
