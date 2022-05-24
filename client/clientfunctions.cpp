@@ -1,4 +1,5 @@
 #include "clientfunctions.h"
+
 void auth(QString log,QString pass){
     QString res="auth "+log+" "+pass;
     Client::getInstance()->Client::SentToServer(res);
@@ -12,6 +13,7 @@ void update_stat(int n, QString upd){
     Client::getInstance()->Client::SentToServer(res);
     qDebug() << res;
 };
+
 QString solve_task1(QString input){ //FDNF input - task, return - answer
     qDebug() << input;
     QString answer = "";
@@ -48,7 +50,7 @@ QString solve_task2(QString input){//KNF input - task, return - answer
             for (int j = 2; j >= 0; j--)
             {
                 if (vars[j] == 1)
-                    bracket += "x" + QString::number(n) + "' V ";
+                     bracket += "x" + QString::number(n) + "' V ";
                 else bracket += "x" + QString::number(n) + " V ";
                 n++;
             }
@@ -63,6 +65,7 @@ QString solve_task2(QString input){//KNF input - task, return - answer
 QString solve_task3(QString input){
     return "placeholder3";
 };
+
 QString generate_text_for_task1(QString input){ //отправляется в интерфейс юзера
     return "Найти ДНФ функции: "+input;
 };
@@ -72,20 +75,8 @@ QString generate_text_for_task2(QString input){
 QString generate_text_for_task3(QString input){
     return "task3 "+input;
 };
-QString generate_task1(){
-    const QString possibleCharacters("01");
-    const int BooleanLength = 8;
 
-       QString BooleanFunction;
-       for(int i=0; i < BooleanLength; ++i)
-       {
-           int index = qrand() % possibleCharacters.length();
-           QChar nextChar = possibleCharacters.at(index);
-           BooleanFunction.append(nextChar);
-       }
-       return BooleanFunction;
-};
-QString generate_task2(){
+QString generate_task12(){
     const QString possibleCharacters("01");
     const int BooleanLength = 8;
 
@@ -99,8 +90,28 @@ QString generate_task2(){
        return BooleanFunction;
 };
 QString generate_task3(){
-    return "task3";
+    QTime midnight(0,0,0);
+    qsrand(midnight.secsTo(QTime::currentTime()));
+    int array[SIZE][SIZE]; // матрица связей
+    //int d[SIZE]; // минимальное расстояние
+    //int v[SIZE]; // посещенные вершины
+    int temp;//, minindex, min;
+    //int begin_index = 0;
+    for (int i = 0; i<SIZE; i++)
+    {
+        array[i][i] = 0;
+        for (int j = i + 1; j<SIZE; j++) {
+            //printf("Введите расстояние %d - %d: ", i + 1, j + 1);
+            //scanf("%d", &temp);
+            temp = qrand() % 12 - 1;
+            array[i][j] = temp;
+            array[j][i] = temp;
+        }
+    }
+
+    return "array";
 };
+
 void check_task(int task_num, QString input, QString answer){ //input - решение (ответ) системы, answer - ответ пользователя
     QString solution = "";
     switch (task_num) {
