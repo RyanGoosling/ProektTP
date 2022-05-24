@@ -2,6 +2,9 @@
 #define CLIENTFUNCTIONS_H
 #include <QString>
 #include <QDebug>
+#include <QRandomGenerator>
+#include <QDateTime>
+#include <bitset>
 #include "Client.h"
 void auth(QString log,QString pass);
 void reg(QString log,QString pass,QString mail);

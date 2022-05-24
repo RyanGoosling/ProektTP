@@ -29,15 +29,15 @@ QByteArray parsing (QString data_from_client, QString socket){
     QByteArray auth(QString login, QString password, QString socket){
 
         DataBase::getInstance();
-        QString res = DataBase::query("Select * from User where login = '"+login+"' and password = '"+password+"'");
+        /*QString res = DataBase::query("Select * from User where login = '"+login+"' and password = '"+password+"'");
         if (res == "")
             return "0";
         else
         {
             DataBase::login(socket, login);
             return "1";
-        }
-        /*QByteArray result = "";
+        }*/
+        QByteArray result = "";
         result.append(DataBase::Found(login, password).toUtf8());
         if (QString(result)=="True")
         {
@@ -46,7 +46,7 @@ QByteArray parsing (QString data_from_client, QString socket){
         }
         else result = "0";
         qDebug() << result;
-        return result;*/
+        return result;
     }
 
     QByteArray reg(QString login, QString password, QString email){
