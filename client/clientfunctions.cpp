@@ -14,7 +14,7 @@ void update_stat(int n, QString upd){
     qDebug() << res;
 };
 
-QString solve_task1(QString input){ //FDNF input - task, return - answer
+QString solve_task1(QString input){ //FDNF input - task, return - answer скобки вразнобой - проверка на соответсвие
     qDebug() << input;
     QString answer = "";
     for (int i = 0; i < 8; ++i) //boolean function bypass
@@ -38,7 +38,7 @@ QString solve_task1(QString input){ //FDNF input - task, return - answer
     qDebug() << answer;
     return answer;
 };
-QString solve_task2(QString input){//KNF input - task, return - answer
+QString solve_task2(QString input){//KNF input - task, return - answer скобки вразнобой - проверка на соответсвие
     qDebug() << input;
     QString answer = "";
     for (int i = 0; i < 8; ++i) //boolean function bypass
@@ -55,7 +55,7 @@ QString solve_task2(QString input){//KNF input - task, return - answer
                 n++;
             }
             bracket += ")";
-            //bracket.replace(bracket.length()-4, 5, ")"); //before: (x1' V x2' V x3' V ), after: (x1' V x2' V x3')
+            bracket.replace(bracket.length()-4, 5, ")"); //before: (x1' V x2' V x3' V ), after: (x1' V x2' V x3')
             answer += bracket + " & ";
         }
     answer.remove(answer.length()-3, 3);//remove excess " & ";
@@ -63,7 +63,65 @@ QString solve_task2(QString input){//KNF input - task, return - answer
     return answer;
 };
 QString solve_task3(QString input){
-    return "placeholder3";
+    QStringList data_list=input.split(QRegExp("\\s+"));
+    //qDebug()<< data_list.front();
+
+    int array[SIZE][SIZE];
+    for (int i = 0; i<SIZE; i++)
+    {
+        for (int j = 0; j<SIZE; j++) {
+            array[i][j] = data_list.front().toInt();
+            data_list.pop_front();
+        }
+    }
+
+    //int array[SIZE][SIZE]; // матрица связей
+    int d[SIZE]; // минимальное расстояние
+    int v[SIZE]; // посещенные вершины
+    int temp, minindex, min;
+    int begin_index = 0;
+    for (int i = 0; i<SIZE; i++)
+      {
+        d[i] = 10000;
+        v[i] = 1;
+      }
+      d[begin_index] = 0;
+      // Шаг алгоритма
+      do {
+        minindex = 10000;
+        min = 10000;
+        for (int i = 0; i<SIZE; i++)
+        { // Если вершину ещё не обошли и вес меньше min
+          if ((v[i] == 1) && (d[i]<min))
+          { // Переприсваиваем значения
+            min = d[i];
+            minindex = i;
+          }
+        }
+        // Добавляем найденный минимальный вес
+        // к текущему весу вершины
+        // и сравниваем с текущим минимальным весом вершины
+        if (minindex != 10000)
+        {
+          for (int i = 0; i<SIZE; i++)
+          {
+            if (array[minindex][i] > 0)
+            {
+              temp = min + array[minindex][i];
+              if (temp < d[i])
+              {
+                d[i] = temp;
+              }
+            }
+          }
+          v[minindex] = 0;
+        }
+      } while (minindex < 10000);
+      // Вывод кратчайших расстояний до вершин
+      //printf("\nКратчайшие расстояния до вершин: \n");
+      //for (int i = 0; i<SIZE; i++)
+        //printf("%5d ", d[i]);
+    return QString::number(d[5]);
 };
 
 QString generate_text_for_task1(QString input){ //отправляется в интерфейс юзера
@@ -72,8 +130,8 @@ QString generate_text_for_task1(QString input){ //отправляется в и
 QString generate_text_for_task2(QString input){
     return "Найти КНФ функции: "+input;
 };
-QString generate_text_for_task3(QString input){
-    return "task3 "+input;
+QString generate_text_for_task3(QString input){//вывод двумерного массива в окно задачи
+    return "Найти кратчайший путь от вершины 1, к вершине 6 по матрице смежности:\n"+input;
 };
 
 QString generate_task12(){
@@ -89,9 +147,12 @@ QString generate_task12(){
        }
        return BooleanFunction;
 };
-QString generate_task3(){
+QString generate_task3(){ //output двумерный массив - матрица связи
     QTime midnight(0,0,0);
-    qsrand(midnight.secsTo(QTime::currentTime()));
+   // qsrand(midnight.secsTo(QTime::currentTime()));
+    QRandomGenerator generator(midnight.secsTo(QTime::currentTime()));
+
+    QString res;
     int array[SIZE][SIZE]; // матрица связей
     //int d[SIZE]; // минимальное расстояние
     //int v[SIZE]; // посещенные вершины
@@ -103,13 +164,20 @@ QString generate_task3(){
         for (int j = i + 1; j<SIZE; j++) {
             //printf("Введите расстояние %d - %d: ", i + 1, j + 1);
             //scanf("%d", &temp);
-            temp = qrand() % 12 - 1;
+            //generator.bounded(1,10);
+            temp = generator.bounded(1,10);//qrand() % 10 + 1; //[1; 10]
             array[i][j] = temp;
             array[j][i] = temp;
         }
     }
+    for (int i = 0; i<SIZE; i++)
+    {    for(int j=0;j<SIZE;j++)
 
-    return "array";
+          res+= QString::number(array[i][j]) + "\t" ;
+        res += "\n";
+    }
+    //qDebug()<<res;
+    return res;
 };
 
 void check_task(int task_num, QString input, QString answer){ //input - решение (ответ) системы, answer - ответ пользователя

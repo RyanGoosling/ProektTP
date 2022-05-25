@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <QTime>
+#include <QRandomGenerator>
 #include "Client.h"
 #define SIZE 6
 void auth(QString log,QString pass);
