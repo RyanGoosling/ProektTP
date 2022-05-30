@@ -64,7 +64,6 @@ QString solve_task2(QString input){//KNF input - task, return - answer скоб�
 };
 QString solve_task3(QString input){
     QStringList data_list=input.split(QRegExp("\\s+"));
-    //qDebug()<< data_list.front();
 
     int array[SIZE][SIZE];
     for (int i = 0; i<SIZE; i++)
@@ -117,10 +116,6 @@ QString solve_task3(QString input){
           v[minindex] = 0;
         }
       } while (minindex < 10000);
-      // Вывод кратчайших расстояний до вершин
-      //printf("\nКратчайшие расстояния до вершин: \n");
-      //for (int i = 0; i<SIZE; i++)
-        //printf("%5d ", d[i]);
     return QString::number(d[5]);
 };
 
@@ -149,23 +144,16 @@ QString generate_task12(){
 };
 QString generate_task3(){ //output двумерный массив - матрица связи
     QTime midnight(0,0,0);
-   // qsrand(midnight.secsTo(QTime::currentTime()));
     QRandomGenerator generator(midnight.secsTo(QTime::currentTime()));
 
     QString res;
     int array[SIZE][SIZE]; // матрица связей
-    //int d[SIZE]; // минимальное расстояние
-    //int v[SIZE]; // посещенные вершины
-    int temp;//, minindex, min;
-    //int begin_index = 0;
+    int temp;
     for (int i = 0; i<SIZE; i++)
     {
         array[i][i] = 0;
         for (int j = i + 1; j<SIZE; j++) {
-            //printf("Введите расстояние %d - %d: ", i + 1, j + 1);
-            //scanf("%d", &temp);
-            //generator.bounded(1,10);
-            temp = generator.bounded(1,10);//qrand() % 10 + 1; //[1; 10]
+            temp = generator.bounded(1,10); //[1; 10]
             array[i][j] = temp;
             array[j][i] = temp;
         }
@@ -176,24 +164,56 @@ QString generate_task3(){ //output двумерный массив - матри�
           res+= QString::number(array[i][j]) + "\t" ;
         res += "\n";
     }
-    //qDebug()<<res;
     return res;
 };
 
-void check_task(int task_num, QString input, QString answer){ //input - решение (ответ) системы, answer - ответ пользователя
-    QString solution = "";
+void check_task(int task_num, QString input, QString answer){ //input - условие, answer - ответ пользователя
+    QString solution = ""; //solution - решение системы
+    bool flag = true;
+    QStringList answer_list, solution_list;
+    qDebug() << answer;
     switch (task_num) {
     case 1:
-        solution = solve_task1(input);
+        solution_list=solve_task1(input).split(QLatin1Char('V'));
+        solution_list.replaceInStrings(") ", ")");
+        solution_list.replaceInStrings(" (", "(");
+
+        answer_list = answer.split(QLatin1Char('V'));
+        answer_list.replaceInStrings(") ", ")");
+        answer_list.replaceInStrings(" (", "(");
+
+        if (answer_list.size() == solution_list.size())
+        {
+            for (int i = 0; i < solution_list.size(); i++)
+                if (!(solution_list.contains(answer_list[i])))
+                    flag = false;
+        }
+        else flag = false;
         break;
     case 2:
-        solution = solve_task2(input);
+        solution_list=solve_task2(input).split(QLatin1Char('&'));
+        solution_list.replaceInStrings(") ", ")");
+        solution_list.replaceInStrings(" (", "(");
+
+        answer_list = answer.split(QLatin1Char('&'));
+        answer_list.replaceInStrings(") ", ")");
+        answer_list.replaceInStrings(" (", "(");
+
+        if (answer_list.size() == solution_list.size())
+        {
+            for (int i = 0; i < solution_list.size(); i++)
+                if (!(solution_list.contains(answer_list[i])))
+                    flag = false;
+        }
+        else flag = false;
         break;
     case 3:
         solution = solve_task3(input);
+        if (solution != answer)
+            flag = false;
         break;
     }
-    if (answer==solution)
+    if (flag)
     update_stat(task_num,"+");
     else update_stat(task_num,"-");
 };
