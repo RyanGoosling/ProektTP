@@ -6,7 +6,7 @@
 #include "serverfunctions.h"
 
 QByteArray parsing (QString data_from_client, QString socket){
-    QStringList data_from_client_list=data_from_client.split(QLatin1Char(' '));
+    QStringList data_from_client_list=data_from_client.split(QLatin1Char(' '), Qt::SkipEmptyParts);
     QString nameOfFunc = data_from_client_list.front();
     data_from_client_list.pop_front();
     if (nameOfFunc=="auth")

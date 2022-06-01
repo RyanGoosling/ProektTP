@@ -24,6 +24,7 @@ void AuthForm::on_pushButton_Reg_clicked()
 
 void AuthForm::on_pushButton_Ok_clicked()
 {
+    if (!ui->lineEdit_Password->text().isEmpty() && !ui->lineEdit_Login->text().isEmpty()){
     QString login = ui->lineEdit_Login->text();
     QString pass = ui->lineEdit_Password->text();
     if (ui->lineEdit_Email->isVisible()){
@@ -36,5 +37,7 @@ void AuthForm::on_pushButton_Ok_clicked()
     auth(login,pass);
     connect(Client::getInstance(),&Client::logged_in,this,&AuthForm::hide);
     }
+    }
+
 }
 
