@@ -9,6 +9,7 @@
 #include <QTime>
 #include <QRandomGenerator>
 #include "Client.h"
+#include "statform.h"
 #define SIZE 6
 void auth(QString log,QString pass);
 void reg(QString log,QString pass,QString mail);

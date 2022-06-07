@@ -28,6 +28,11 @@ QByteArray parsing (QString data_from_client, QString socket){
         updatestat(data_from_client_list.at(0), data_from_client_list.at(1), socket);
         return "State update.\n";
         }
+    else if (nameOfFunc == "stat")
+        {
+        QByteArray stats = DataBase::stat(socket);
+        return stats;
+        }
     else return "Wrong syntax.\n";
 }
 

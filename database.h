@@ -153,6 +153,22 @@ class DataBase
             query.bindValue(":login", login);
             query.exec();
         }
+        static QByteArray stat(QString socket)
+        {
+            QSqlQuery query(db);
+            query.prepare("select task1_right, task1_all, task2_right, task2_all, task3_right, task3_all from User WHERE socket = :socket");
+            query.bindValue(":socket", socket);
+            query.exec();
+            query.first();
+            QString task1_right = query.value("task1_right").toString();
+            QString task1_all = query.value("task1_all").toString();
+            QString task2_right = query.value("task2_right").toString();
+            QString task2_all = query.value("task2_all").toString();
+            QString task3_right = query.value("task3_right").toString();
+            QString task3_all = query.value("task3_all").toString();
+            QString send = "stat "+task1_right+" "+task1_all+" "+task2_right+" "+task2_all+" "+task3_right+" "+task3_all;
+            return send.toUtf8();
+        }
 
         static void query(QString msg){
             QSqlQuery query(db);

@@ -16,7 +16,7 @@ class Client;
 class ClientDestroyer
 {
 	private:
-		Client * p_instance;
+        Client * p_instance;
 	public:
 		~ClientDestroyer() { delete p_instance;}
         void initialize(Client * p){p_instance = p;}
@@ -32,6 +32,7 @@ class Client: public QObject
         static QTcpSocket * mTcpSocket;
 signals:
     void logged_in();
+    void stat_in();
 	protected:
          Client(QObject *parent = nullptr)
 		{
@@ -54,9 +55,7 @@ signals:
 
     public:
         int test=0;
-        int get_test(){
-            return test;
-        }
+        QList <int> stats;
 		static Client* getInstance(){
 			if (!p_instance)
 			{
@@ -79,6 +78,19 @@ signals:
         	QByteArray array = mTcpSocket->readAll();
             if (array=="1"){
                 emit logged_in();
+            }
+            QStringList a=QString(array).split(QLatin1Char(' '), Qt::SkipEmptyParts);
+            if (a.front()=="stat"){
+                a.pop_front();
+                //QVector <QString> b=a.toVector();
+                //qDebug() << b;
+                //stats->append(b.at(0).toInt());
+                for (int i=0;i<6;i++){
+                    stats.append(a.front().toInt());
+                    a.pop_front();
+                    qDebug() << stats;
+                }
+                emit stat_in();
             }
     	}
 	}

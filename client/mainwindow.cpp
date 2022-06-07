@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     auth_f = new AuthForm;
     task_f = new TaskForm;
+    stat_f = new StatForm;
     auth_f->show();
     connect(Client::getInstance(),&Client::logged_in,this,&MainWindow::show);
 }
@@ -60,5 +61,12 @@ void MainWindow::on_actionExit_triggered()
 void MainWindow::on_pushButton_Exit_clicked()
 {
     close();
+}
+
+
+void MainWindow::on_pushButton_Stat_clicked()
+{
+    Client::getInstance()->Client::SentToServer("stat");
+    connect(Client::getInstance(),&Client::stat_in,stat_f,&StatForm::setstat);
 }
 

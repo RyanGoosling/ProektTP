@@ -38,6 +38,5 @@ void AuthForm::on_pushButton_Ok_clicked()
     connect(Client::getInstance(),&Client::logged_in,this,&AuthForm::hide);
     }
     }
-
 }
 
