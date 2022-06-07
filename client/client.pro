@@ -20,6 +20,7 @@ SOURCES += \
     clientfunctions.cpp \
     main.cpp \
     mainwindow.cpp \
+    statform.cpp \
     taskform.cpp
 
 HEADERS += \
@@ -27,11 +28,13 @@ HEADERS += \
     authform.h \
     clientfunctions.h \
     mainwindow.h \
+    statform.h \
     taskform.h
 
 FORMS += \
     authform.ui \
     mainwindow.ui \
+    statform.ui \
     taskform.ui
 
 # Default rules for deployment.
