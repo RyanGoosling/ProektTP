@@ -3,12 +3,12 @@
 void auth(QString log,QString pass){
     QString res="auth "+log+" "+pass;
     Client::getInstance()->Client::SentToServer(res);
-    qDebug() << res;
+    //qDebug() << res;
 };
 void reg(QString log,QString pass,QString mail){
     QString res="reg "+log+" "+pass+" "+mail;
     Client::getInstance()->Client::SentToServer(res);
-    qDebug() << res;
+    //qDebug() << res;
 };
 void update_stat(int n, QString upd){
     QString res= "updatestat "+QString::number(n)+" "+upd;

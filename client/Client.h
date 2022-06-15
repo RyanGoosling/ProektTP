@@ -82,13 +82,10 @@ signals:
             QStringList a=QString(array).split(QLatin1Char(' '), Qt::SkipEmptyParts);
             if (a.front()=="stat"){
                 a.pop_front();
-                //QVector <QString> b=a.toVector();
-                //qDebug() << b;
-                //stats->append(b.at(0).toInt());
                 for (int i=0;i<6;i++){
                     stats.append(a.front().toInt());
                     a.pop_front();
-                    qDebug() << stats;
+                    //qDebug() << stats;
                 }
                 emit stat_in();
             }
