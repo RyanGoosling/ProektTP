@@ -1,10 +1,18 @@
 /*!
  * \file
  * \brief Файл, содержащий реализацию методов класса ServerFunctions
+ *
+ * Данный класс реализует функционал сервера
  */
 
 #include "serverfunctions.h"
 
+/*!
+ * \brief parsing обработка входящего сообщения от клиента
+ * \param data_from_client строчка, отправленная клиентом
+ * \param socket адрес сокета, необходимый для сохранения входа и обновления статистики
+ * \return Функцию, к которой обратился клиент, либо ошибку о неверном синтаксисе
+ */
 QByteArray parsing (QString data_from_client, QString socket){
     QStringList data_from_client_list=data_from_client.split(QLatin1Char(' '), Qt::SkipEmptyParts);
     QString nameOfFunc = data_from_client_list.front();
@@ -36,6 +44,13 @@ QByteArray parsing (QString data_from_client, QString socket){
     else return "Wrong syntax.\n";
 }
 
+/*!
+     * \brief auth проверка авторизации
+     * \param login логин, который ввёл пользователь
+     * \param password пароль, который ввёл пользователь
+     * \param socket адрес сокета, необходимый для сохранении информации о входе
+     * \return 0 или 1 в соответствии с успешностью проверки
+     */
     QByteArray auth(QString login, QString password, QString socket){
 
         DataBase::getInstance();
@@ -51,6 +66,13 @@ QByteArray parsing (QString data_from_client, QString socket){
         return result;
     }
 
+    /*!
+     * \brief reg функция регестрации нового пользователя
+     * \param login логин, который ввёл пользователь
+     * \param password пароль, который ввёл пользователь
+     * \param email почта, которую ввёл пользователь
+     * \return результат функции добавления записи в БД: True; The user is already registered.
+     */
     QByteArray reg(QString login, QString password, QString email){
         QByteArray result = "";
         DataBase::getInstance();
@@ -59,6 +81,10 @@ QByteArray parsing (QString data_from_client, QString socket){
         return result;
     }
 
+    /*!
+     * \brief check функция вызова вывода данных таблицы БД в дебаг строку
+     * \return результат успешности вывода: Success; Fail.
+     */
     QByteArray check(){
         QByteArray result = "";
         DataBase::getInstance();
@@ -67,6 +93,14 @@ QByteArray parsing (QString data_from_client, QString socket){
         return result;
     }
 
+    /*!
+     * \brief updatestat функция вызова изменения статистики пользователя
+     * \param task номер задания
+     * \param move успешность выполнения самого задания
+     * \param socket адрес сокета - уникальный индефикатор выполнения задания
+     * При успешном выполнении задания добавляется 1 к 2 столбцам таблицы: taskN_right, taskN_all.
+     * При неправильном выполнении задания добавляется 1 к столбцу таблицы taskN_all.
+     */
     void updatestat(QString task, QString move, QString socket){
         if (move == "+")
             DataBase::query("UPDATE User SET task"+task+"_right = task"+task+"_right+1 WHERE socket = '"+socket+"'");
