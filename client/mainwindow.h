@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 #include "authform.h"
 #include "taskform.h"
+#include "statform.h"
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
@@ -27,9 +28,12 @@ private slots:
 
     void on_pushButton_Exit_clicked();
 
+    void on_pushButton_Stat_clicked();
+
 private:
     Ui::MainWindow *ui;
     AuthForm *auth_f;
     TaskForm *task_f;
+    StatForm *stat_f;
 };
 #endif // MAINWINDOW_H

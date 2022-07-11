@@ -1,14 +1,19 @@
+﻿/*!
+ * \file
+ * \brief Файл, содержащий реализацию методов класса MyTcpServer
+ *
+ * Данный класс реализует первоначальный сервер с сигналами
+ */
+
 #include "mytcpserver.h"
-#include <QDebug>
-#include <QCoreApplication>
-#include "serverfunctions.h"
+#include <sstream>
 
 MyTcpServer::~MyTcpServer()
 {
     mTcpServer->close();
 }
 
-MyTcpServer::MyTcpServer(QObject *parent) : QObject(parent){ //Убрано Вадим
+MyTcpServer::MyTcpServer(QObject *parent) : QObject(parent){
     mTcpServer = new QTcpServer(this);
     connect(mTcpServer, &QTcpServer::newConnection,
             this, &MyTcpServer::incomingConnection);
@@ -23,66 +28,46 @@ MyTcpServer::MyTcpServer(QObject *parent) : QObject(parent){ //Убрано Ва
     }
 }
 
-void MyTcpServer::incomingConnection() //Вадимqintptr socketDescriptor
+void MyTcpServer::incomingConnection()
 {
-    //socket = new QTcpSocket;
-    //socket->setSocketDescriptor(socketDescriptor);
-    socket = mTcpServer->nextPendingConnection();
+    QTcpSocket* socket = mTcpServer->nextPendingConnection();
     connect(socket, &QTcpSocket::readyRead, this, &MyTcpServer::slotServerRead);
     connect(socket, &QTcpSocket::disconnected, this, &MyTcpServer::slotClientDisconnected);
-
+    //connect(socket, SIGNAL(QTcpSocket::stateChanged(QTcpSocket::ClosingState)), this, SLOT(MyTcpServer::slotClientDisconnected));
     Sockets.push_back(socket);
-    qDebug() << "Client connection"; //<< socketDescriptor;
+    std::stringstream flow;
+    std::string address = "";
+    flow << socket;
+    flow >> address;
+    qDebug() << "Client connection"<<QString::fromStdString(address);//<<" with "<<socket->socketDescriptor();
 }
-
-//void MyTcpServer::slotReadyRead() //Вадим
-//{
-//    socket = (QTcpSocket*)sender();
-//    QDataStream in(socket);
-//    in.setVersion(QDataStream::Qt_5_9);
-//    if(in.status() == QDataStream::Ok)
-//    {
-//        qDebug() << "read...";
-//        QString str;
-//        in >> str;
-//        qDebug() << str;
-//    }
-//    else
-//    {
-//        qDebug() << "DataStream error";
-//    }
-//}
-
-//void MyTcpServer::SendToClient(QString str) //Вадим
-//{
-//    Data.clear();
-//    QDataStream out(&Data, QIODevice::WriteOnly);
-//    out.setVersion(QDataStream::Qt_5_9);
-//    out << str;
-//    socket->write(Data);
-//}
-
-//void MyTcpServer::slotNewConnection(){ //Убрано Вадим
-// //   if(server_status==1){
-//        socket = mTcpServer->nextPendingConnection();
-//        socket->write("Hello, World!!! I am echo server!\r\n");
-//        connect(socket, &QTcpSocket::readyRead,this,&MyTcpServer::slotServerRead);
-//        connect(socket,&QTcpSocket::disconnected,this,&MyTcpServer::slotClientDisconnected);
-//   // }
-//}
 
 void MyTcpServer::slotServerRead(){
     QString res= "";
-    socket = (QTcpSocket*)sender(); //Добавлено Вадим
+    QTcpSocket* socket = (QTcpSocket*)sender();
+    std::stringstream flow;
+    std::string address = "";
+    flow << socket;
+    flow >> address;
     while(socket->bytesAvailable()>0)
     {
         QByteArray array = socket->readAll();
         res.append(array);
-        socket->write(parsing(res.toUtf8()));
+        socket->write(parsing(res.toUtf8(), QString::fromStdString(address)));
     }
 
 }
 
 void MyTcpServer::slotClientDisconnected(){
+    QTcpSocket* socket = (QTcpSocket*)sender();
+    std::stringstream flow;
+    std::string address = "";
+    flow << socket;
+    flow >> address;
+    //Sockets.remove(Sockets.indexOf(socket));
+    DataBase::logout(QString::fromStdString(address));
+    qDebug() << "Client disconnected"<< QString::fromStdString(address); //<<" with "<<socket->socketDescriptor();
     socket->close();
+    //socket->deleteLater();
+    //qDebug()<<socket->state();
 }

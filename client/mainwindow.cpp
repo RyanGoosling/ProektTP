@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
+#include "Client.h"
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -8,8 +8,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     auth_f = new AuthForm;
     task_f = new TaskForm;
+    stat_f = new StatForm;
     auth_f->show();
-    connect(auth_f,&AuthForm::logged_in,this,&MainWindow::show);
+    connect(Client::getInstance(),&Client::logged_in,this,&MainWindow::show);
 }
 
 MainWindow::~MainWindow()
@@ -60,5 +61,12 @@ void MainWindow::on_actionExit_triggered()
 void MainWindow::on_pushButton_Exit_clicked()
 {
     close();
+}
+
+
+void MainWindow::on_pushButton_Stat_clicked()
+{
+    Client::getInstance()->Client::SentToServer("stat");
+    connect(Client::getInstance(),&Client::stat_in,stat_f,&StatForm::setstat);
 }
 

@@ -26,15 +26,15 @@ void TaskForm::set_task(int n)
     QString task="";
     switch(n){
     case 1:
-        input=generate_task1();
+        input= generate_task12();
         task = generate_text_for_task1(input);
         break;
     case 2:
-        input=generate_task2();
+        input= generate_task12();
         task = generate_text_for_task2(input);
         break;
     case 3:
-        input=generate_task3();
+        input= generate_task3();
         task = generate_text_for_task3(input);
         break;
     }

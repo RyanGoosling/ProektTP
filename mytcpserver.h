@@ -1,3 +1,8 @@
+/*!
+ * \file
+ * \brief Заголовочный файл с описанием класса MyTcpServer
+ */
+
 #ifndef MYTCPSERVER_H
 #define MYTCPSERVER_H
 #include <QObject>
@@ -8,30 +13,29 @@
 #include <QByteArray>
 #include <QDebug>
 
-class MyTcpServer : public  QObject// QTcpServer//Убрано В
+#include <QCoreApplication>
+#include "serverfunctions.h"
+#include "database.h"
+
+class MyTcpServer : public  QObject
 {
     Q_OBJECT
 public:
-    explicit MyTcpServer(QObject *parent = nullptr);//Убрано В
-     QTcpSocket * socket;//В
+    explicit MyTcpServer(QObject *parent = nullptr);
+     //QTcpSocket * socket;
     ~MyTcpServer();
 public slots:
 
-    void incomingConnection(); //Вqintptr socketDescriptor
-    //void slotReadyRead(); //Убрано В
+    void incomingConnection();
 
-    //void slotNewConnection(); //Убрано В
-    void slotClientDisconnected();//Убрано В (qintptr socketDescriptor)
+    void slotClientDisconnected();
 
     void slotServerRead();
 
 private:
     QTcpServer * mTcpServer;
 
-    QVector <QTcpSocket*> Sockets; //В
-    //QByteArray Data; //В
-
-    //void SendToClient(QString str); //Убрано В
+    QVector <QTcpSocket*> Sockets;
 };
 #endif // MYTCPSERVER_H
 
