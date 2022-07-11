@@ -10,12 +10,14 @@ RUN apt-get install build-essential -y
 #RUN apt-get -y install gcc-snapshot g++-11
 # RUN apt-get install -y qt-devel qt-create
  
+
 WORKDIR /root/
-RUN mkdir server
-WORKDIR /root/server/
-COPY *.cpp /root/server/
-COPY *.h /root/server/
-COPY *.pro /root/server/
+RUN mkdir ProektTP
+WORKDIR /root/ProektTP/
+COPY *.cpp /root/ProektTP/
+COPY *.h /root/ProektTP/
+COPY *.pro /root/ProektTP/
+COPY *.db /root/ProektTP/
  
 
 RUN qmake echoServer.pro
